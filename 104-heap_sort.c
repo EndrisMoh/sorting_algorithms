@@ -50,7 +50,7 @@ void _largest(int *array, size_t size, int i, const int r_size)
 }
 
 /**
- * heap_sort - Call largest using sift-Down method
+ * heap_sort - Heap sort algorithm using sift-Down method
  * @array: The array that generate the layers
  * @size: Size of the array
  * Return: Nothing
