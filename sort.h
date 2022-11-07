@@ -26,6 +26,7 @@ listint_t *get_head(listint_t *tmp);
 void _qsort(int *array, int left, int right, size_t size);
 size_t partition(int *array, int left, int right, size_t size);
 void swap(int *array, int left, int right);
+void insertion_sort(int *array, int size, int diff);
 
 void bubble_sort(int *array, size_t size);
 void insertion_sort_list(listint_t **list);
