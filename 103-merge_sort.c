@@ -15,6 +15,7 @@ void print_data(char *msg, int *a, int from, int to)
 
 	printf("[%s]: ", msg);
 	sep = "";
+	
 	for (i = from; i <= to; i++)
 	{
 		printf("%s%d", sep, a[i]);
@@ -97,6 +98,7 @@ void merge_sort(int *array, size_t size)
 	buffer = malloc(sizeof(int) * size);
 	if (!buffer)
 		return;
+	
 	msort(array, 0, size - 1, buffer);
 	free(buffer);
 }
