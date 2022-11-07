@@ -1,94 +1,80 @@
 #include "sort.h"
 
 /**
- * sswap - swap two vars in array
- * @A: array
- * @a: 1st num
- * @b: 2nd num
- * @size: size of array
+ * swap_nums - swaps numbers
+ * @arr: input array
+ * @a: first index
+ * @b: second index
+ * Return: no return
  */
-void sswap(int *A, int a, int b, size_t size)
+void swap_nums(int *arr, int a, int b)
 {
-	int tmp;
-
-	tmp = A[a];
-	A[a] = A[b];
-	A[b] = tmp;
-	print_array(A, size);
+	arr[a] = arr[a] + arr[b];
+	arr[b] = arr[a] - arr[b];
+	arr[a] = arr[a] - arr[b];
 }
 
 /**
- * swim - routine to build heap
- * @A: int* array being sorted
- * @i: index to swim
+ * recursion_heap - recursion that builds the max heap tree
+ * @arr: input array
+ * @i: index number
  * @size: size of the array
+ * @limit: limit of the array
+ * Return: no return
  */
-void swim(int *A, int i, size_t size)
+void recursion_heap(int *arr, int i, size_t size, int limit)
 {
-	while (A[i] > A[(i - 1) / 2])
+	int bigger;
+	int i2;
+
+	i2 = i * 2;
+
+	if (i2 + 2 < limit)
 	{
-		if (A[i] < A[((i - 1) / 2) * 2 + 1] || A[i] < A[((i - 1) / 2) * 2 + 2])
-			break;
-		sswap(A, i, (i - 1) / 2, size);
-		i = (i - 1) / 2;
+		recursion_heap(arr, i2 + 1, size, limit);
+		recursion_heap(arr, i2 + 2, size, limit);
+	}
+
+	if (i2 + 1 >= limit)
+		return;
+
+	if (i2 + 2 < limit)
+		bigger = (arr[i2 + 1] > arr[i2 + 2]) ? (i2 + 1) : (i2 + 2);
+	else
+		bigger = i2 + 1;
+
+	if (arr[i] < arr[bigger])
+	{
+		swap_nums(arr, i, bigger);
+		print_array(arr, size);
+		recursion_heap(arr, bigger, size, limit);
 	}
 }
 
 /**
- * sift - routine to place items into place in heap
- * @A: int *array being sorted
- * @i: index to sink
- * @N: size of array
- * @size: size of the full array
- */
-void sift(int *A, int i, int N, size_t size)
-{
-	while (N >= (i * 2) + 1)
-	{
-		if (i * 2 + 2 <= N && (A[i] < A[i * 2 + 1] || A[i] < A[i * 2 + 2]))
-		{
-			if (A[i * 2 + 1] > A[i * 2 + 2])
-			{
-				sswap(A, i, i * 2 + 1, size);
-				i = i * 2 + 1;
-			}
-			else
-			{
-				sswap(A, i, i * 2 + 2, size);
-				i = i * 2 + 2;
-			}
-		}
-		else if (i * 2 + 1 <= N && A[i] < A[i * 2 + 1])
-		{
-			sswap(A, i, i * 2 + 1, size);
-			i = i * 2 + 1;
-		}
-		else
-			break;
-	}
-}
-
-/**
- * heap_sort - heapsort with sift-down method
- * @array: int* array to sort
+ * heap_sort - Heap sort algorithm with sift-down method
+ * @array: input array
  * @size: size of the array
  */
 void heap_sort(int *array, size_t size)
 {
-	int i, N;
+	int i;
+	size_t limit;
 
-	for (i = size - 1; i > 0; i--)
+	if (!array || size == 0)
+		return;
+
+	i = 0;
+	limit = size;
+
+	while (limit > 1)
 	{
-		if (array[i] > array[(i - 1) / 2])
+		recursion_heap(array, i, size, limit);
+		if (array[i] >= array[limit - 1])
 		{
-			swim(array, i, size);
-			sift(array, i, size, size);
+			swap_nums(array, i, limit - 1);
+			print_array(array, size);
 		}
-	}
-	for (N = size - 1; N > 0;)
-	{
-		sswap(array, 0, N, size);
-		N--;
-		sift(array, 0, N, size);
+		limit--;
 	}
 }
